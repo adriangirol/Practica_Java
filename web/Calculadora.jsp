@@ -11,21 +11,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Calculadora</title>
     </head>
-    
+    <body>
         <%@ include file="index.html" %>
         
-        <% boolean Activar = (Boolean)session.getAttribute("Activar");
-            if (Activar==true) {
-        String resultado = (String)session.getAttribute("resultado");
-        String operando1 = (String)session.getAttribute("operando1");
-        String operando2 = (String)session.getAttribute("operando2");
-        String operacion = (String)session.getAttribute("operacion");
+        <% 
+            String resultado;
+            String operando1;
+            String operando2;
+            String operacion;
+            if (request.getAttribute("resultado")!=null) {
+        resultado = (String)request.getAttribute("resultado");
+        operando1 = (String)request.getAttribute("operando1");
+        operando2 = (String)request.getAttribute("operando2");
+        operacion = (String)request.getAttribute("operacion");
             //Mostramos por pantalla.
              out.println("<h1> ¡Resultado!</h1>");
-             out.println("<p>"+operando1+operacion+operando2+" = "+resultado+ " </p>");
+             out.println("<p>"+operando1+" "+operacion+" "+operando2+"  =  "+resultado+ " </p>");}
         %>
-        
-        
+        <% if(request.getAttribute("error")!=null){
+            String error=(String) request.getAttribute("error");
+           out.println("<h1 style='color:red;'> ¡Error!</h1>"); 
+           out.println(error);
+        }
+        %>
         
         
         <h1>Mi calculadora</h1>
@@ -49,5 +57,5 @@
                  
             </table>
         </form>
-    
+    </body>
 </html>

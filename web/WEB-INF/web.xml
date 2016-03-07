@@ -4,9 +4,33 @@
         <servlet-name>Calculadora</servlet-name>
         <servlet-class>adgimo.Calculadora</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Tablas</servlet-name>
+        <servlet-class>adgimo.Tablas</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Comun</servlet-name>
+        <servlet-class>adgimo.Comun</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Tablas1a10</servlet-name>
+        <servlet-class>adgimo.Tablas1a10</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Calculadora</servlet-name>
         <url-pattern>/Calculadora</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tablas</servlet-name>
+        <url-pattern>/Tablas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Comun</servlet-name>
+        <url-pattern>/Comun</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tablas1a10</servlet-name>
+        <url-pattern>/Tablas1a10</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

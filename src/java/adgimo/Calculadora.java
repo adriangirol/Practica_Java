@@ -7,10 +7,14 @@ package adgimo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 /**
  *
@@ -31,8 +35,8 @@ public class Calculadora extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            boolean Acti_resultado=false;
-            float resultado;
+            
+            float resultado=0;
             
             //variables de recogida del formulario
              String op1;
@@ -41,64 +45,107 @@ public class Calculadora extends HttpServlet {
              //recogida del formulario
              op1 = request.getParameter("oper1");
              op2 = request.getParameter("oper2");
-             operacion = request.getParameter("operacion");
+             operacion = request.getParameter("Operacion");
              request.setAttribute("operacion",operacion);
+             
+             if(Comun.isNumeric(op1)&& Comun.isNumeric(op2)){
              //transformacion a float de los operandos
              float operando1=Float.parseFloat(op1);
-             request.setAttribute("operando1",operando1);
              float operando2=Float.parseFloat(op2);
-             request.setAttribute("operando2",operando2);
+             
+            
+             //envio de valores para jsp
+             request.setAttribute("operando1",Float.toString(operando1));
+             request.setAttribute("operando2",Float.toString(operando2));
              switch(operacion){
                  case "+":
                      //calculamos el resultado
                     resultado= Suma(operando1,operando2);
-                        //Enviamos el resultado al jsp
-                        request.setAttribute("resultado",resultado);
-                        request.setAttribute("Activo",Acti_resultado=true);
-                        //redireccionamos al jsp
-                        response.sendRedirect("/Calculadora.jsp"); 
+                        
+                        
                     break;
                  case "-": 
                     resultado= Resta(operando1,operando2);
-                        request.setAttribute("resultado",resultado);
-                        request.setAttribute("Activo",Acti_resultado=true);
-                        response.sendRedirect("/Calculadora.jsp"); 
+
                     break;
                  case "*": 
-                    resultado= Multiplicar(operando1,operando2);
-                        request.setAttribute("resultado",resultado);
-                        request.setAttribute("Activo",Acti_resultado=true);
-                        response.sendRedirect("/Calculadora.jsp"); 
+                    resultado= Comun.Multiplicar(operando1,operando2);
+
                     break;
                  case "/":
                      resultado= Dividir(operando1,operando2);
-                        request.setAttribute("resultado",resultado);
-                        request.setAttribute("Activo",Acti_resultado=true);
-                        response.sendRedirect("/Calculadora.jsp"); 
+
                     break;
                  default:
-                     out.println("El operando no es correcto");
+                     
+                     request.setAttribute("resultado","El operando no es correcto");
+                     Redireccion(request,response,"Calculadora.jsp"); 
                      break;
              }
+             //Enviamos el resultado al jsp
+                request.setAttribute("resultado",Float.toString(resultado));
+            }else
+             {
+                 request.setAttribute("error","Los valores deben ser numericos.");
+             }    //redireccionamos al jsp
+                 RequestDispatcher dispatcher=request.getRequestDispatcher("Calculadora.jsp");
+                try {
+                    dispatcher.forward(request,response);
+                } catch (IOException ex) {
+                    Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
+        
         }
     }
+    
+    /**
+     * 
+     * @param n1
+     * @param n2
+     * @return Suma de los parametros
+     */
      static float Suma(float n1,float n2){
         float resultado= n1+n2;
         return resultado;
     }
+     /**
+      * 
+      * @param n1
+      * @param n2
+      * @return Resta de los parametros
+      */
     static float Resta(float n1,float n2){
         float resultado= n1-n2;
         return resultado;
     }
-    static float Multiplicar(float n1,float n2){
-        float resultado= n1*n2;
-        return resultado;
-    }
+    
+    /**
+     * 
+     * @param n1
+     * @param n2
+     * @return la division de los parametros
+     */
     static float Dividir(float n1,float n2){
         float resultado= n1/n2;
         return resultado;
     }
+    /**
+     * 
+     * @param request
+     * @param response
+     * @param redireccion donde enviamos el renvio
+     * @throws ServletException 
+     */
+    static void Redireccion( HttpServletRequest request, HttpServletResponse response,String redireccion) throws ServletException{
+   
+    RequestDispatcher dispatcher=request.getRequestDispatcher(redireccion);
+        try {
+            dispatcher.forward(request,response);
+        } catch (IOException ex) {
+            Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
